@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , breakpointHook
 , pkg-config
-, quickjs
+#, quickjs
 #, ApplicationServices
 }:
 
@@ -38,26 +38,28 @@ stdenv.mkDerivation rec {
 #    runHook postUnpack
 #  '';
 
-  src = fetchFromGitHub {
-    owner = "GlassGhost";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-HU5R0JG32Z6jcWsQDtlBzjfNHbnQxUcuyM9Nbob8xwQ=";
-  };
+#  src = fetchFromGitHub {
+#    owner = "GlassGhost";
+#    repo = pname;
+#    rev = version;
+#    sha256 = "sha256-HU5R0JG32Z6jcWsQDtlBzjfNHbnQxUcuyM9Nbob8xwQ=";
+#  };
+
+  src = builtins.fetchTarball https://bellard.org/libbf/libbf-2020-01-19.tar.gz;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ quickjs.dev ];
+#  buildInputs = [ quickjs.dev ];
   #nativeBuildInputs = [ breakpointHook pkg-config quickjs.dev ];
 
   #propagatedBuildInputs = [ libBF ]
   #  ++ lib.optional stdenv.isDarwin ApplicationServices;
 
-  patches = [ ./add-quickjs-cflags.patch ];
+#  patches = [ ./add-quickjs-cflags.patch ];
 
-  postPatch = ''
-    sed -e "s@%QUICKJS%@${quickjs.dev}/include/quickjs/@" -i Makefile
-  '';
+ # postPatch = ''
+ #   sed -e "s@%QUICKJS%@${quickjs.dev}/include/quickjs/@" -i Makefile
+ # '';
 
   outputs = [ "out" "dev" ];
   #outputs = [ "out" ];
